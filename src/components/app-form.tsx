@@ -29,6 +29,7 @@ import {
 import { US_STATES } from '@/lib/constants';
 import type { Appointment } from '@/lib/types';
 import axios from 'axios';
+import { format } from 'date-fns';
 
 const formSchema = z.object({
   first_name: z.string().min(1, 'First name is required'),
@@ -63,17 +64,28 @@ const AppForm = ({ appointment, onFinish, ...props }: AppFormProps) => {
     formState: { isSubmitting, isValid },
   } = form;
 
-  const onSubmit = handleSubmit(async (data: FormSchema) => {
-    console.log({ ...data, ...appointment });
+  const onSubmit = handleSubmit(
+    async ({ first_name, last_name, email, state }: FormSchema) => {
+      const emails = [
+        axios.post('/api/send-form', {
+          first_name,
+          email,
+        }),
+        axios.post('/api/alert-intake', {
+          name: `${first_name} ${last_name}`,
+          email,
+          state,
+          time: appointment.time,
+          date: format(appointment.date!, 'PPP'),
+        }),
+      ];
 
-    await axios.post('/api/send-email', {
-      first_name: data.first_name,
-      email: data.email,
-    });
+      await Promise.all(emails);
 
-    reset(defaultValues);
-    onFinish();
-  });
+      // reset(defaultValues);
+      // onFinish();
+    },
+  );
 
   return (
     <Dialog {...props}>

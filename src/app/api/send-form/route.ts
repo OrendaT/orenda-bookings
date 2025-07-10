@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import mailchimp from '@mailchimp/mailchimp_transactional';
-import { INTAKE_FORM_URL as url } from '@/lib/constants';
+import { INTAKE_FORM_URL as url, ORENDA_LOGO as logo } from '@/lib/constants';
 
 // Initialize with server-side API key
 const mailchimpClient = mailchimp(process.env.MAILCHIMP_API_KEY || '');
@@ -10,8 +10,6 @@ export async function POST(request: NextRequest) {
     const data = await request.json();
     const { email, first_name } = data;
 
-    const logo =
-      'https://mcusercontent.com/f49e77d8389e110b514988d07/images/bd4a6ffd-dce6-72c2-e379-2223ce4d0a6b.png';
     const subject = 'Invite to fill out Orenda Intake Form';
     const content = `
         <p>Hello ${first_name || ''},</p>
