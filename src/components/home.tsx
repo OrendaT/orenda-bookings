@@ -46,7 +46,7 @@ function TimePeriod({
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
-    <label className="clamp-[px,3,8] flex cursor-pointer text-sm text-zinc-700 select-none">
+    <label className="clamp-[px,3,6] flex cursor-pointer text-sm text-zinc-700 select-none">
       <input
         className="peer hidden"
         type="radio"
@@ -55,7 +55,7 @@ function TimePeriod({
         value={period.value}
         onChange={onChange}
       />
-      <span className="border-orenda-green peer-checked:text-orenda-green peer-checked:bg-orenda-green/5 clamp-[max-w,20,24] w-full rounded-md py-1 text-center whitespace-nowrap transition-all duration-300 peer-checked:border peer-checked:font-medium">
+      <span className="border-orenda-green peer-checked:text-orenda-green peer-checked:bg-orenda-green/5 w-full rounded-md py-1 text-center whitespace-nowrap transition-all duration-300 peer-checked:border peer-checked:font-medium">
         {period.label}
       </span>
     </label>
