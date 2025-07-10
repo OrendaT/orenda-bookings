@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import mailchimp from '@mailchimp/mailchimp_transactional';
-import { INTAKE_FORM_URL as url, ORENDA_LOGO as logo } from '@/lib/constants';
+import { ORENDA_LOGO as logo } from '@/lib/constants';
 
 // Initialize with server-side API key
 const mailchimpClient = mailchimp(process.env.MAILCHIMP_API_KEY || '');

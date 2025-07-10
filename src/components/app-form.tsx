@@ -10,7 +10,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
+
 import {
   Dialog,
   DialogContent,
@@ -30,15 +30,7 @@ import { US_STATES } from '@/lib/constants';
 import type { Appointment } from '@/lib/types';
 import axios from 'axios';
 import { format } from 'date-fns';
-
-const formSchema = z.object({
-  first_name: z.string().min(1, 'First name is required'),
-  last_name: z.string().min(1, 'Last name is required'),
-  email: z.email('Invalid email address'),
-  state: z.string().min(1, 'State is required'),
-});
-
-type FormSchema = z.infer<typeof formSchema>;
+import { AppFormSchema, appFormSchema } from '@/lib/schemas';
 
 type AppFormProps = DialogProps & {
   appointment: Appointment;
@@ -54,7 +46,7 @@ const defaultValues = {
 
 const AppForm = ({ appointment, onFinish, ...props }: AppFormProps) => {
   const form = useForm({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(appFormSchema),
     defaultValues,
   });
 
@@ -65,7 +57,7 @@ const AppForm = ({ appointment, onFinish, ...props }: AppFormProps) => {
   } = form;
 
   const onSubmit = handleSubmit(
-    async ({ first_name, last_name, email, state }: FormSchema) => {
+    async ({ first_name, last_name, email, state }: AppFormSchema) => {
       const emails = [
         axios.post('/api/send-form', {
           first_name,
