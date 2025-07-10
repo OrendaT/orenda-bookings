@@ -7,7 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { IconType } from 'react-icons/lib';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -74,27 +74,42 @@ function TimePeriodRow({
   appointment: Appointment;
   setTime: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
-  const inputDisabled = (time: number) => {
-    const now = new Date();
-    const selectedDate = appointment.date;
-    if (!selectedDate) return false;
+  const inputDisabled = useCallback(
+    (time: number) => {
+      const now = new Date();
+      const selectedDate = appointment.date;
+      if (!selectedDate) return false;
 
-    // 1. If selected date is today and current time is less than the given time
-    const isToday = now.toDateString() === selectedDate.toDateString();
+      // 1. If selected date is today and current time is less than the given time
+      const isToday = now.toDateString() === selectedDate.toDateString();
 
-    if (isToday && time < now.getHours()) {
-      return true;
+      if (isToday && time < now.getHours()) {
+        return true;
+      }
+
+      // 2. If selected date is a weekend and time is later than 7PM
+      const isWeekend =
+        selectedDate.getDay() === 0 || selectedDate.getDay() === 6;
+      if (isWeekend && time > 19) {
+        return true;
+      }
+
+      return false;
+    },
+    [appointment.date],
+  );
+
+  useEffect(() => {
+    if (!appointment.time) return;
+
+    const isPastTime = inputDisabled(parseInt(appointment.time));
+
+    if (isPastTime) {
+      setTime({
+        target: { name: 'time', value: '' },
+      } as React.ChangeEvent<HTMLInputElement>);
     }
-
-    // 2. If selected date is a weekend and time is later than 7PM
-    const isWeekend =
-      selectedDate.getDay() === 0 || selectedDate.getDay() === 6;
-    if (isWeekend && time > 19) {
-      return true;
-    }
-
-    return false;
-  };
+  }, [appointment, inputDisabled, setTime]);
 
   return (
     <div className="clamp-[gap,4,12] flex flex-col items-center sm:flex-row">
@@ -134,20 +149,21 @@ export default function Home() {
 
   const isValid = appointment.date && appointment.time;
 
-  const setTime = ({
-    target: { name, value },
-  }: React.ChangeEvent<HTMLInputElement>) => {
-    setAppointment({
-      ...appointment,
-      [name]: value,
-    });
-  };
+  const setTime = useCallback(
+    ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
+      setAppointment( prev => ({
+        ...prev,
+        [name]: value,
+      }));
+    },
+    [setAppointment],
+  );
 
   const setDate = (date?: Date) => {
-    setAppointment({
-      ...appointment,
+    setAppointment(prev => ({
+      ...prev,
       date,
-    });
+    }));
   };
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
