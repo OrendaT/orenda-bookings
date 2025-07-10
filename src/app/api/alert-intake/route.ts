@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       html,
       to: [
         {
-          email,
+          email: 'intake@orendapsych.com',
           name: 'Intake Team',
           type: 'to' as const,
         },
