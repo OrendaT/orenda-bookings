@@ -87,8 +87,8 @@ const AppForm = ({ appointment, onFinish, ...props }: AppFormProps) => {
 
     await Promise.all(promises);
 
-    // reset(defaultValues);
-    // onFinish();
+    reset(defaultValues);
+    onFinish();
   });
 
   return (
