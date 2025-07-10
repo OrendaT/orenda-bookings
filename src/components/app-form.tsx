@@ -33,6 +33,7 @@ import { format } from 'date-fns';
 import { AppFormSchema, appFormSchema } from '@/lib/schemas';
 import { AlertDialogProps } from '@radix-ui/react-alert-dialog';
 import { XIcon } from 'lucide-react';
+import { toAmPm } from '@/lib/utils';
 
 type AppFormProps = AlertDialogProps & {
   appointment: Appointment;
@@ -67,7 +68,7 @@ const AppForm = ({ appointment, onFinish, ...props }: AppFormProps) => {
       }),
       axios.post('/api/alert-intake', {
         ...data,
-        time: appointment.time,
+        time: toAmPm(parseInt(appointment.time)),
         date: format(appointment.date!, 'PPP'),
       }),
     ];
@@ -87,7 +88,7 @@ const AppForm = ({ appointment, onFinish, ...props }: AppFormProps) => {
             Please fill the fields below to complete your booking
           </AlertDialogDescription>
 
-          <AlertDialogCancel className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 size-8 p-1 right-4 rounded-md opacity-70 transition-opacity hover:opacity-100 focus:ring-1 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
+          <AlertDialogCancel className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 right-4 size-8 rounded-md p-1 opacity-70 transition-opacity hover:opacity-100 focus:ring-1 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
             <XIcon />
             <span className="sr-only">Close</span>
           </AlertDialogCancel>

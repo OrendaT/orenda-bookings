@@ -39,11 +39,13 @@ function TimePeriod({
   onChange,
   name,
   value,
+  disabled,
 }: {
   period: { label: string; value: string };
   name: string;
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  disabled: boolean;
 }) {
   return (
     <label className="clamp-[px,3,6] flex cursor-pointer text-sm text-zinc-700 select-none">
@@ -54,8 +56,9 @@ function TimePeriod({
         checked={period.value === value}
         value={period.value}
         onChange={onChange}
+        disabled={disabled}
       />
-      <span className="border-orenda-green peer-checked:text-orenda-green peer-checked:bg-orenda-green/5 w-full rounded-md py-1 text-center whitespace-nowrap transition-all duration-300 peer-checked:border peer-checked:font-medium">
+      <span className="border-orenda-green peer-checked:text-orenda-green peer-checked:bg-orenda-green/5 peer-disabled:text-muted-foreground w-full rounded-md py-1 text-center whitespace-nowrap transition-all duration-300 peer-checked:border peer-checked:font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-50">
         {period.label}
       </span>
     </label>
@@ -71,6 +74,30 @@ function TimePeriodRow({
   appointment: Appointment;
   setTime: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
+  const inputDisabled = (time: number) => {
+    console.log(time)
+    const now = new Date();
+    const selectedDate = appointment.date;
+    if (!selectedDate) return false;
+
+    // 1. If selected date is today and current time is less than the given time
+    const isToday = now.toDateString() === selectedDate.toDateString();
+
+    if (isToday && now.getHours() < time) {
+      console.log(time)
+      return true;
+    }
+
+    // 2. If selected date is a weekend and time is later than 7PM
+    const isWeekend =
+      selectedDate.getDay() === 0 || selectedDate.getDay() === 6;
+    if (isWeekend && time > 19) {
+      return true;
+    }
+
+    return false;
+  };
+
   return (
     <div className="clamp-[gap,4,12] flex flex-col items-center sm:flex-row">
       <TimePeriodHeader Icon={timePeriod.Icon} period={timePeriod.label} />
@@ -87,6 +114,7 @@ function TimePeriodRow({
                 period={period}
                 value={appointment.time}
                 onChange={setTime}
+                disabled={inputDisabled(parseInt(period.value))}
               />
             </CarouselItem>
           ))}
