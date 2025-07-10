@@ -48,6 +48,8 @@ const defaultValues = {
   state: '',
 };
 
+const sheetsUrl = process.env.NEXT_PUBLIC_GOOGLE_SHEETS || '';
+
 const AppForm = ({ appointment, onFinish, ...props }: AppFormProps) => {
   const form = useForm({
     resolver: zodResolver(appFormSchema),
@@ -61,19 +63,29 @@ const AppForm = ({ appointment, onFinish, ...props }: AppFormProps) => {
   } = form;
 
   const onSubmit = handleSubmit(async (data: AppFormSchema) => {
-    const emails = [
+    const time = toAmPm(parseInt(appointment.time));
+    const date = format(appointment.date!, 'PPP');
+
+    const _data = {
+      ...data,
+      time,
+      date,
+    };
+
+    const promises = [
       axios.post('/api/send-form', {
         first_name: data.first_name,
         email: data.email,
       }),
-      axios.post('/api/alert-intake', {
-        ...data,
-        time: toAmPm(parseInt(appointment.time)),
-        date: format(appointment.date!, 'PPP'),
+      axios.post('/api/alert-intake', _data),
+      axios.post(sheetsUrl, _data, {
+        headers: {
+          'Content-Type': 'text/plain;charset=utf-8',
+        },
       }),
     ];
 
-    await Promise.all(emails);
+    await Promise.all(promises);
 
     reset(defaultValues);
     onFinish();

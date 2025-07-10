@@ -75,7 +75,6 @@ function TimePeriodRow({
   setTime: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   const inputDisabled = (time: number) => {
-    console.log(time)
     const now = new Date();
     const selectedDate = appointment.date;
     if (!selectedDate) return false;
@@ -84,7 +83,6 @@ function TimePeriodRow({
     const isToday = now.toDateString() === selectedDate.toDateString();
 
     if (isToday && now.getHours() < time) {
-      console.log(time)
       return true;
     }
 
@@ -157,7 +155,6 @@ export default function Home() {
     if (!isValid) return;
 
     setOpen(true);
-    console.log(appointment);
   };
 
   const onFinish = () => {
