@@ -78,7 +78,7 @@ const AppForm = ({ appointment, onFinish, ...props }: AppFormProps) => {
         email: data.email,
       }),
       axios.post('/api/alert-intake', _data),
-      axios.post(sheetsUrl, _data, {
+      axios.post(sheetsUrl, {..._data, timestamp: format(new Date(), 'Pp')}, {
         headers: {
           'Content-Type': 'text/plain;charset=utf-8',
         },
