@@ -95,7 +95,7 @@ const AppForm = ({ appointment, onFinish, ...props }: AppFormProps) => {
     <AlertDialog {...props}>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Basic Info</AlertDialogTitle>
+          <AlertDialogTitle>Booking Info</AlertDialogTitle>
           <AlertDialogDescription>
             Please fill the fields below to complete your booking
           </AlertDialogDescription>
