@@ -12,13 +12,13 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from './ui/dialog';
-import type { DialogProps } from '@radix-ui/react-dialog';
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from './ui/alert-dialog';
 import {
   Select,
   SelectContent,
@@ -31,8 +31,10 @@ import type { Appointment } from '@/lib/types';
 import axios from 'axios';
 import { format } from 'date-fns';
 import { AppFormSchema, appFormSchema } from '@/lib/schemas';
+import { AlertDialogProps } from '@radix-ui/react-alert-dialog';
+import { XIcon } from 'lucide-react';
 
-type AppFormProps = DialogProps & {
+type AppFormProps = AlertDialogProps & {
   appointment: Appointment;
   onFinish: () => void;
 };
@@ -41,6 +43,7 @@ const defaultValues = {
   first_name: '',
   last_name: '',
   email: '',
+  phone: '',
   state: '',
 };
 
@@ -56,38 +59,40 @@ const AppForm = ({ appointment, onFinish, ...props }: AppFormProps) => {
     formState: { isSubmitting, isValid },
   } = form;
 
-  const onSubmit = handleSubmit(
-    async ({ first_name, last_name, email, state }: AppFormSchema) => {
-      const emails = [
-        axios.post('/api/send-form', {
-          first_name,
-          email,
-        }),
-        axios.post('/api/alert-intake', {
-          name: `${first_name} ${last_name}`,
-          email,
-          state,
-          time: appointment.time,
-          date: format(appointment.date!, 'PPP'),
-        }),
-      ];
+  const onSubmit = handleSubmit(async (data: AppFormSchema) => {
+    const emails = [
+      axios.post('/api/send-form', {
+        first_name: data.first_name,
+        email: data.email,
+      }),
+      axios.post('/api/alert-intake', {
+        ...data,
+        time: appointment.time,
+        date: format(appointment.date!, 'PPP'),
+      }),
+    ];
 
-      await Promise.all(emails);
+    await Promise.all(emails);
 
-      reset(defaultValues);
-      onFinish();
-    },
-  );
+    reset(defaultValues);
+    onFinish();
+  });
 
   return (
-    <Dialog {...props}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Basic Info</DialogTitle>
-          <DialogDescription>
+    <AlertDialog {...props}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Basic Info</AlertDialogTitle>
+          <AlertDialogDescription>
             Please fill the fields below to complete your booking
-          </DialogDescription>
-        </DialogHeader>
+          </AlertDialogDescription>
+
+          <AlertDialogCancel className="ring-offset-background focus:ring-ring data-[state=open]:bg-accent data-[state=open]:text-muted-foreground absolute top-4 size-8 p-1 right-4 rounded-md opacity-70 transition-opacity hover:opacity-100 focus:ring-1 focus:outline-hidden disabled:pointer-events-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
+            <XIcon />
+            <span className="sr-only">Close</span>
+          </AlertDialogCancel>
+        </AlertDialogHeader>
+
         <Form {...form}>
           <form onSubmit={onSubmit} className="space-y-4" noValidate>
             <FormField
@@ -116,6 +121,7 @@ const AppForm = ({ appointment, onFinish, ...props }: AppFormProps) => {
                 </FormItem>
               )}
             />
+
             <FormField
               control={form.control}
               name="email"
@@ -126,6 +132,24 @@ const AppForm = ({ appointment, onFinish, ...props }: AppFormProps) => {
                     <Input
                       placeholder="e.g johndoe@gmail.com"
                       type="email"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone Number</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="e.g +2124567890"
+                      type="tel"
                       {...field}
                     />
                   </FormControl>
@@ -172,8 +196,8 @@ const AppForm = ({ appointment, onFinish, ...props }: AppFormProps) => {
             </Button>
           </form>
         </Form>
-      </DialogContent>
-    </Dialog>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 };
 export default AppForm;

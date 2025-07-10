@@ -8,7 +8,8 @@ const mailchimpClient = mailchimp(process.env.MAILCHIMP_API_KEY || '');
 export async function POST(request: NextRequest) {
   try {
     const data = await request.json();
-    const { email, name, state, date, time } = data;
+    const { email, first_name, last_name, phone, state, date, time } = data;
+    const name = `${first_name} ${last_name}`;
 
     const subject = 'Patient Booking Request';
 
@@ -21,17 +22,17 @@ export async function POST(request: NextRequest) {
   
         <!-- Content -->
         <main style="color: #333; line-height: 1.5; font-size: 14px;">
-            <p>Hello Orenda,</p>
+            <p>Hi Team,</p>
             
-            <p>${name} has booked an appointment with Orenda Psychiatry.</p>
+            <p>${name} as indicated interest in booking an intake at ${time} on ${date}, please follow up with them.</p>
 
-            <p>Here are the details:</p>
+            <p>Contact details:</p>
 
-            <p>Name: ${name}</p>
+            <p>First Name: ${first_name}</p>
+            <p>Last Name: ${last_name}</p>
             <p>Email: ${email}</p>
-            <p>State of Residence: ${state}</p>
-            <p>Appointment Date: ${date}</p>
-            <p>Appointment Time: ${time}</p>
+            <p>Phone Number: ${phone}</p>
+            <p>State: ${state}</p>
         </main>
   
   

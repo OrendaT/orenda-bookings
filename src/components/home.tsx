@@ -55,7 +55,7 @@ function TimePeriod({
         value={period.value}
         onChange={onChange}
       />
-      <span className="border-orenda-green peer-checked:text-orenda-green peer-checked:bg-orenda-green/5 w-24 rounded-md py-1 text-center transition-all duration-300 peer-checked:border peer-checked:font-medium">
+      <span className="border-orenda-green peer-checked:text-orenda-green peer-checked:bg-orenda-green/5 w-full clamp-[max-w,20,24] rounded-md py-1 text-center whitespace-nowrap transition-all duration-300 peer-checked:border peer-checked:font-medium">
         {period.label}
       </span>
     </label>
@@ -72,15 +72,15 @@ function TimePeriodRow({
   setTime: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
-    <div className="flex flex-col items-center gap-4 sm:flex-row">
+    <div className="flex flex-col items-center clamp-[gap,4,12] sm:flex-row">
       <TimePeriodHeader Icon={timePeriod.Icon} period={timePeriod.label} />
 
-      <Carousel className="min-w-0">
-        <CarouselContent className="max-w-[32rem] min-w-0">
+      <Carousel className=" w-full">
+        <CarouselContent className="max-w-md">
           {timePeriod.periods.map((period) => (
             <CarouselItem
               key={period.value}
-              className="h-fit min-w-0 basis-1/4 content-center pl-0 lg:basis-[23%]"
+              className="basis-1/4 content-center pl-0 lg:basis-[23%]"
             >
               <TimePeriod
                 name="time"
