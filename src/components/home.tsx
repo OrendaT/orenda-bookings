@@ -82,7 +82,7 @@ function TimePeriodRow({
     // 1. If selected date is today and current time is less than the given time
     const isToday = now.toDateString() === selectedDate.toDateString();
 
-    if (isToday && now.getHours() < time) {
+    if (isToday && time < now.getHours()) {
       return true;
     }
 
