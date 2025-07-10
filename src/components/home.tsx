@@ -55,7 +55,7 @@ function TimePeriod({
         value={period.value}
         onChange={onChange}
       />
-      <span className="border-orenda-green peer-checked:text-orenda-green peer-checked:bg-orenda-green/5 w-full clamp-[max-w,20,24] rounded-md py-1 text-center whitespace-nowrap transition-all duration-300 peer-checked:border peer-checked:font-medium">
+      <span className="border-orenda-green peer-checked:text-orenda-green peer-checked:bg-orenda-green/5 clamp-[max-w,20,24] w-full rounded-md py-1 text-center whitespace-nowrap transition-all duration-300 peer-checked:border peer-checked:font-medium">
         {period.label}
       </span>
     </label>
@@ -72,10 +72,10 @@ function TimePeriodRow({
   setTime: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
-    <div className="flex flex-col items-center clamp-[gap,4,12] sm:flex-row">
+    <div className="clamp-[gap,4,12] flex flex-col items-center sm:flex-row">
       <TimePeriodHeader Icon={timePeriod.Icon} period={timePeriod.label} />
 
-      <Carousel className=" w-full">
+      <Carousel className="w-full">
         <CarouselContent className="max-w-md">
           {timePeriod.periods.map((period) => (
             <CarouselItem
@@ -155,7 +155,9 @@ export default function Home() {
             className="mx-auto mb-12 rounded-lg [--cell-size:--spacing(11)] md:[--cell-size:--spacing(12)]"
             buttonVariant="ghost"
             disabled={(date) => {
-              return date < new Date();
+              const today = new Date();
+              today.setHours(0, 0, 0, 0);
+              return date < today;
             }}
             classNames={{
               caption_label: 'clamp-[text,lg,xl] font-medium',
