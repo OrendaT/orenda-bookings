@@ -82,8 +82,8 @@ const AppForm = ({ appointment, onFinish, ...props }: AppFormProps) => {
 
       await Promise.all(emails);
 
-      // reset(defaultValues);
-      // onFinish();
+      reset(defaultValues);
+      onFinish();
     },
   );
 
