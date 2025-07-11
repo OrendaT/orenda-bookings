@@ -8,7 +8,6 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { useCallback, useEffect, useState } from 'react';
-import type { IconType } from 'react-icons/lib';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import AppForm from '@/components/app-form';
@@ -27,7 +26,7 @@ const inputDisabled = (time: number, selectedDate: Date | undefined) => {
   // 1. If selected date is today and current time is less than the given time
   const isToday = now.toDateString() === selectedDate.toDateString();
 
-  if (isToday && time <= now.getHours()) {
+  if (isToday && now.getHours() > time - 3) {
     return true;
   }
 
@@ -44,11 +43,11 @@ function TimePeriodHeader({
   Icon,
   period,
 }: {
-  Icon: IconType;
+  Icon: (typeof timePeriods)[number]['Icon'];
   period: string;
 }) {
   return (
-    <h2 className="flex items-center gap-2 text-sm font-medium tracking-widest capitalize sm:w-36">
+    <h2 className="flex items-center gap-2 text-sm font-medium tracking-widest capitalize sm:w-60">
       <Icon className="size-5" /> {period}:
     </h2>
   );
@@ -189,12 +188,12 @@ export default function Home() {
 
         <h2 className="mb-8 text-center">Choose a time that works for you</h2>
 
-        <form onSubmit={onSubmit} className="">
+        <form onSubmit={onSubmit} className="space-y-8 sm:space-y-12">
           <Calendar
             mode="single"
             selected={appointment.date}
             onSelect={setDate}
-            className="mx-auto mb-12 rounded-lg [--cell-size:--spacing(11)] md:[--cell-size:--spacing(12)]"
+            className="mx-auto rounded-lg [--cell-size:--spacing(11)] md:[--cell-size:--spacing(12)]"
             buttonVariant="ghost"
             disabled={(date) => {
               const today = new Date();
@@ -206,7 +205,7 @@ export default function Home() {
             }}
           />
 
-          <section className="mb-12 divide-y divide-zinc-200 border-y border-zinc-200 *:py-4">
+          <section className="divide-y divide-zinc-200 border-y border-zinc-200 *:py-4">
             {timePeriods.map((timePeriod) => (
               <TimePeriodRow
                 key={timePeriod.label}
@@ -216,6 +215,15 @@ export default function Home() {
               />
             ))}
           </section>
+
+          <p className="mx-auto max-w-xl text-center italic text-sm">
+            We accept most commercial insurance plans including Optum, United
+            Healthcare, Aetna, Cigna, Anthem Blue Cross Blue Shield, Empire
+            Oscar and Private pay.
+            <br />
+            <br />
+            Unfortunately we do not accept Medicaid/Medicare Plans at this time.
+          </p>
 
           <Button
             className="bg-orenda-purple mx-auto flex rounded-full px-14"

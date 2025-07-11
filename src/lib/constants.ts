@@ -1,4 +1,4 @@
-import { LuMoon, LuSun, LuSunrise } from 'react-icons/lu';
+import { Moon, Sun, SunDim, Sunrise } from 'lucide-react';
 
 export const INTAKE_FORM_URL = 'https://forms.orendapsych.com/intake';
 export const ORENDA_LOGO =
@@ -9,58 +9,12 @@ export const US_STATES = [
   { value: 'Massachusetts' },
   { value: 'New Jersey' },
   { value: 'Connecticut' },
-  { value: 'Alabama' },
-  { value: 'Alaska' },
-  { value: 'Arizona' },
-  { value: 'Arkansas' },
-  { value: 'California' },
-  { value: 'Colorado' },
-  { value: 'Delaware' },
-  { value: 'Florida' },
-  { value: 'Georgia' },
-  { value: 'Hawaii' },
-  { value: 'Idaho' },
-  { value: 'Illinois' },
-  { value: 'Indiana' },
-  { value: 'Iowa' },
-  { value: 'Kansas' },
-  { value: 'Kentucky' },
-  { value: 'Louisiana' },
-  { value: 'Maine' },
-  { value: 'Maryland' },
-  { value: 'Michigan' },
-  { value: 'Minnesota' },
-  { value: 'Mississippi' },
-  { value: 'Missouri' },
-  { value: 'Montana' },
-  { value: 'Nebraska' },
-  { value: 'Nevada' },
-  { value: 'New Hampshire' },
-  { value: 'New Mexico' },
-  { value: 'North Carolina' },
-  { value: 'North Dakota' },
-  { value: 'Ohio' },
-  { value: 'Oklahoma' },
-  { value: 'Oregon' },
-  { value: 'Pennsylvania' },
-  { value: 'Rhode Island' },
-  { value: 'South Carolina' },
-  { value: 'South Dakota' },
-  { value: 'Tennessee' },
-  { value: 'Texas' },
-  { value: 'Utah' },
-  { value: 'Vermont' },
-  { value: 'Virginia' },
-  { value: 'Washington' },
-  { value: 'West Virginia' },
-  { value: 'Wisconsin' },
-  { value: 'Wyoming' },
 ];
 
 export const timePeriods = [
   {
     label: 'Morning',
-    Icon: LuSunrise,
+    Icon: Sunrise,
     periods: [
       { label: '8 AM', value: '8' },
       { label: '9 AM', value: '9' },
@@ -70,12 +24,18 @@ export const timePeriods = [
   },
   {
     label: 'Afternoon',
-    Icon: LuSun,
+    Icon: Sun,
     periods: [
       { label: '12 PM', value: '12' },
       { label: '1 PM', value: '13' },
       { label: '2 PM', value: '14' },
       { label: '3 PM', value: '15' },
+    ],
+  },
+  {
+    label: 'Late Afternoon',
+    Icon: SunDim,
+    periods: [
       { label: '4 PM', value: '16' },
       { label: '5 PM', value: '17' },
       { label: '6 PM', value: '18' },
@@ -83,7 +43,7 @@ export const timePeriods = [
   },
   {
     label: 'Evening',
-    Icon: LuMoon,
+    Icon: Moon,
     periods: [
       { label: '7 PM', value: '19' },
       { label: '8 PM', value: '20' },
