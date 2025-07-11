@@ -27,7 +27,7 @@ const inputDisabled = (time: number, selectedDate: Date | undefined) => {
   // 1. If selected date is today and current time is less than the given time
   const isToday = now.toDateString() === selectedDate.toDateString();
 
-  if (isToday && time < now.getHours()) {
+  if (isToday && time <= now.getHours()) {
     return true;
   }
 
