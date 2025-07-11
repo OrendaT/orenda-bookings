@@ -27,13 +27,18 @@ import {
   SelectValue,
 } from './ui/select';
 import { US_STATES } from '@/lib/constants';
-import type { Appointment } from '@/lib/types';
+import type {
+  Appointment,
+  GoogleSheetsResponse,
+  MailChimpResponse,
+} from '@/lib/types';
 import axios from 'axios';
 import { format } from 'date-fns';
 import { AppFormSchema, appFormSchema } from '@/lib/schemas';
 import { AlertDialogProps } from '@radix-ui/react-alert-dialog';
 import { XIcon } from 'lucide-react';
 import { toAmPm } from '@/lib/utils';
+import { toast } from 'sonner';
 
 type AppFormProps = AlertDialogProps & {
   appointment: Appointment;
@@ -73,22 +78,42 @@ const AppForm = ({ appointment, onFinish, ...props }: AppFormProps) => {
     };
 
     const promises = [
-      axios.post('/api/send-form', {
+      axios.post<MailChimpResponse>('/api/send-form', {
         first_name: data.first_name,
         email: data.email,
       }),
-      axios.post('/api/alert-intake', _data),
-      axios.post(sheetsUrl, {..._data, timestamp: format(new Date(), 'Pp')}, {
-        headers: {
-          'Content-Type': 'text/plain;charset=utf-8',
+      axios.post<MailChimpResponse>('/api/alert-intake', _data),
+      axios.post<GoogleSheetsResponse>(
+        sheetsUrl,
+        { ..._data, timestamp: format(new Date(), 'Pp') },
+        {
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8',
+          },
         },
-      }),
+      ),
     ];
 
-    await Promise.all(promises);
+    const res = await Promise.all(promises);
 
-    reset(defaultValues);
-    onFinish();
+    if (res.every((r) => r.data.success)) {
+      reset(defaultValues);
+      onFinish();
+    } else {
+      toast.error('Something went wrong', {
+        description: (
+          <span className='text-black'>
+            {res
+              .map((r) => {
+                if ('response' in r.data)
+                  return r.data.response[0].reject_reason;
+              })
+              .filter(Boolean)
+              .join(' | ')}
+          </span>
+        ),
+      });
+    }
   });
 
   return (

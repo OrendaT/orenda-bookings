@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import mailchimp from '@mailchimp/mailchimp_transactional';
+import Mailchimp from '@mailchimp/mailchimp_transactional';
 import { INTAKE_FORM_URL as url, ORENDA_LOGO as logo } from '@/lib/constants';
+import { isAxiosError } from 'axios';
 
 // Initialize with server-side API key
-const mailchimpClient = mailchimp(process.env.MAILCHIMP_API_KEY || '');
+const mailchimpClient = Mailchimp(process.env.MAILCHIMP_API_KEY || '');
 
 export async function POST(request: NextRequest) {
   try {
@@ -73,13 +74,20 @@ export async function POST(request: NextRequest) {
     // Send email via Mailchimp
     const response = await mailchimpClient.messages.send({ message });
 
-    return NextResponse.json({ success: true, response });
+    if (isAxiosError(response)) {
+      throw response;
+    }
+
+    return NextResponse.json({
+      success: !response[0].reject_reason,
+      response,
+    });
   } catch (error) {
     console.error('Email sending error:', error);
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error,
       },
       { status: 500 },
     );
