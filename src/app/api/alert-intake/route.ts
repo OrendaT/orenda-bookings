@@ -24,16 +24,20 @@ export async function POST(request: NextRequest) {
         <!-- Content -->
         <main style="color: #333; line-height: 1.5; font-size: 14px;">
             <p>Hi Team,</p>
-            
             <p>${name} as indicated interest in booking an intake at ${time} on ${date}, please follow up with them.</p>
 
-            <p>Contact details:</p>
+            <br/>
 
+            <p>Contact details:</p>
             <p>First Name: ${first_name}</p>
             <p>Last Name: ${last_name}</p>
             <p>Email: ${email}</p>
             <p>Phone Number: ${phone}</p>
             <p>State: ${state}</p>
+
+            <br/>
+
+            <p>Thank you!</p>
         </main>
   
   
