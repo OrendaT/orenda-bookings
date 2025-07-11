@@ -60,7 +60,7 @@ export async function POST(request: NextRequest) {
       html,
       to: [
         {
-          email: 'tech@orendapsych.com',
+          email: 'intake@orendapsych.com',
           name: 'Intake Team',
           type: 'to' as const,
         },
