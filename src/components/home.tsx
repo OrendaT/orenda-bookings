@@ -194,7 +194,6 @@ export default function Home() {
             selected={appointment.date}
             onSelect={setDate}
             className="mx-auto rounded-lg [--cell-size:--spacing(11)] md:[--cell-size:--spacing(12)]"
-            buttonVariant="ghost"
             disabled={(date) => {
               const today = new Date();
               today.setHours(0, 0, 0, 0);
