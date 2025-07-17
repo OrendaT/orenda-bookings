@@ -186,7 +186,6 @@ function CalendarDayButton({
   }, [modifiers.focused]);
 
   const _day = day.date.toLocaleDateString();
-  const today = new Date().toLocaleDateString();
 
   return (
     <Button
@@ -194,7 +193,6 @@ function CalendarDayButton({
       variant="ghost"
       size="icon"
       data-day={_day}
-      data-today={_day === today}
       data-selected-single={
         modifiers.selected &&
         !modifiers.range_start &&

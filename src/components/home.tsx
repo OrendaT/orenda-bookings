@@ -179,6 +179,10 @@ export default function Home() {
     location.href = INTAKE_FORM_URL;
   };
 
+  useEffect(() => {
+    console.log(appointment);
+  }, []);
+
   return (
     <>
       <main className="padding-inline flex min-h-dvh flex-col items-center pt-24 pb-20">
@@ -215,7 +219,7 @@ export default function Home() {
             ))}
           </section>
 
-          <p className="mx-auto max-w-xl text-center italic text-sm">
+          <p className="mx-auto max-w-xl text-center text-sm italic">
             We accept most commercial insurance plans including Optum, United
             Healthcare, Aetna, Cigna, Anthem Blue Cross Blue Shield, Empire
             Oscar and Private pay.
