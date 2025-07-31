@@ -15,7 +15,7 @@ import type { Appointment } from '@/lib/types';
 import { INTAKE_FORM_URL, timePeriods } from '@/lib/constants';
 
 const initialValues: Appointment = {
-  date: undefined,
+  date: new Date(),
   time: '',
 };
 
